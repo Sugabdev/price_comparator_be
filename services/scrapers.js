@@ -52,7 +52,7 @@ export async function scraper () {
           // PAGE SETTINGS
           const page = await context.newPage()
 
-          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
           await page.waitForSelector('[data-component-type="s-search-result"]', { timeout: 60000 })
 
           // GET PRODUCTS
@@ -110,7 +110,7 @@ export async function scraper () {
           // PAGE SETTINGS
           const page = await context.newPage()
 
-          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
 
           await page.waitForSelector('.ui-search-layout__item', { timeout: 60000 })
 
@@ -171,7 +171,7 @@ export async function scraper () {
           // PAGE SETTINGS
           const page = await context.newPage()
 
-          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
           await page.waitForSelector('div.item-cell', { timeout: 60000 })
 
           // GET PRODUCTS
