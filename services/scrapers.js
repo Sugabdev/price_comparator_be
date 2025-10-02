@@ -156,63 +156,63 @@ export async function scraper () {
 
           throw new Error('MERCADO LIBRE: No se pudo obtener el producto')
         }
-      },
-      {
-        name: 'Newegg',
-        url: `https://www.newegg.com/p/pl?d=${searchParams(search)}`,
-        data: async ({ browser, url }) => {
-        // BROWSER SETTINGS
-          const context = await browser.newContext({
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-            viewport: { width: 1366, height: 768 },
-            locale: 'en-US'
-          })
-
-          // PAGE SETTINGS
-          const page = await context.newPage()
-
-          await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
-          await page.waitForSelector('div.item-cell', { timeout: 60000 })
-
-          // GET PRODUCTS
-          const productList = await page.$$('div.item-cell')
-
-          if (!productList) {
-            await page.close()
-            throw new Error('No se encontró ningún producto')
-          }
-
-          for (const product of productList) {
-            if (!product) continue
-
-            // GET PRODUCT IMAGE
-            const image = await product.$eval('img', (element) => element.getAttribute('src'))
-
-            // GET PRODUCT DESCRIPTION
-            const description = await product.$eval('a.item-title', (element) => element.textContent?.trim())
-
-            // GET PRODUCT PRICE
-            const wholePrice = await product.$eval('li.price-current > strong', element => element.textContent?.trim())
-            const decimalPrice = await product.$eval('li.price-current > sup', element => element.textContent?.trim())
-            const price = `$${wholePrice}${decimalPrice}`
-
-            // RETURN THE PRICE IN NUMERIC FORMAT
-            const orderByPrice = normalizePrice(price)
-
-            // GET PRODUCT LINK
-            const link = await product.$eval('a.item-img', (element) => element.getAttribute('href'))
-
-            if (!image || !description || !price || !link || !url || !orderByPrice) continue
-
-            await page.close()
-
-            // RETURN PRODUCT DATA
-            return { image, description, price, link, url, orderByPrice }
-          }
-
-          throw new Error('NEWEGG: No se pudo obtener el producto')
-        }
       }
+      // {
+      //   name: 'Newegg',
+      //   url: `https://www.newegg.com/p/pl?d=${searchParams(search)}`,
+      //   data: async ({ browser, url }) => {
+      //   // BROWSER SETTINGS
+      //     const context = await browser.newContext({
+      //       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+      //       viewport: { width: 1366, height: 768 },
+      //       locale: 'en-US'
+      //     })
+
+      //     // PAGE SETTINGS
+      //     const page = await context.newPage()
+
+      //     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 })
+      //     await page.waitForSelector('div.item-cell', { timeout: 60000 })
+
+      //     // GET PRODUCTS
+      //     const productList = await page.$$('div.item-cell')
+
+      //     if (!productList) {
+      //       await page.close()
+      //       throw new Error('No se encontró ningún producto')
+      //     }
+
+      //     for (const product of productList) {
+      //       if (!product) continue
+
+      //       // GET PRODUCT IMAGE
+      //       const image = await product.$eval('img', (element) => element.getAttribute('src'))
+
+      //       // GET PRODUCT DESCRIPTION
+      //       const description = await product.$eval('a.item-title', (element) => element.textContent?.trim())
+
+      //       // GET PRODUCT PRICE
+      //       const wholePrice = await product.$eval('li.price-current > strong', element => element.textContent?.trim())
+      //       const decimalPrice = await product.$eval('li.price-current > sup', element => element.textContent?.trim())
+      //       const price = `$${wholePrice}${decimalPrice}`
+
+      //       // RETURN THE PRICE IN NUMERIC FORMAT
+      //       const orderByPrice = normalizePrice(price)
+
+      //       // GET PRODUCT LINK
+      //       const link = await product.$eval('a.item-img', (element) => element.getAttribute('href'))
+
+      //       if (!image || !description || !price || !link || !url || !orderByPrice) continue
+
+      //       await page.close()
+
+      //       // RETURN PRODUCT DATA
+      //       return { image, description, price, link, url, orderByPrice }
+      //     }
+
+      //     throw new Error('NEWEGG: No se pudo obtener el producto')
+      //   }
+      // }
     ]
 
     const browser = await chromium.launch({
